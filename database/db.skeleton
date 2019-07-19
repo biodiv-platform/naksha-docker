@@ -1,0 +1,713 @@
+ 
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.4 (Ubuntu 11.4-0ubuntu0.19.04.1)
+-- Dumped by pg_dump version 11.4 (Ubuntu 11.4-0ubuntu0.19.04.1)
+
+-- Started on 2019-07-17 07:54:18 EDT
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 3 (class 3079 OID 19146)
+-- Name: postgis; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+
+
+--
+-- TOC entry 4472 (class 0 OID 0)
+-- Dependencies: 3
+-- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
+
+
+--
+-- TOC entry 2 (class 3079 OID 20733)
+-- Name: postgis_sfcgal; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA public;
+
+
+--
+-- TOC entry 4473 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION postgis_sfcgal; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis_sfcgal IS 'PostGIS SFCGAL functions';
+
+
+--
+-- TOC entry 200 (class 1259 OID 16391)
+-- Name: layer_template_id_seq; Type: SEQUENCE; Schema: public; Owner: naksha
+--
+
+CREATE SEQUENCE public.layer_template_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.layer_template_id_seq OWNER TO naksha;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 206 (class 1259 OID 16433)
+-- Name: Layer_template; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Layer_template" (
+    __mlocate__id bigint DEFAULT nextval('public.layer_template_id_seq'::regclass) NOT NULL,
+    __mlocate__layer_id bigint,
+    __mlocate__status smallint,
+    __mlocate__nid bigint DEFAULT 0,
+    __mlocate__created_by bigint,
+    __mlocate__created_date date,
+    __mlocate__modified_by bigint,
+    __mlocate__modified_date date,
+    __mlocate__validated_by bigint,
+    __mlocate__validated_date date
+);
+
+
+ALTER TABLE public."Layer_template" OWNER TO naksha;
+
+--
+-- TOC entry 198 (class 1259 OID 16387)
+-- Name: Meta_Layer_layer_id_seq; Type: SEQUENCE; Schema: public; Owner: naksha
+--
+
+CREATE SEQUENCE public."Meta_Layer_layer_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Meta_Layer_layer_id_seq" OWNER TO naksha;
+
+--
+-- TOC entry 204 (class 1259 OID 16399)
+-- Name: Meta_Layer; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Meta_Layer" (
+    layer_id bigint DEFAULT nextval('public."Meta_Layer_layer_id_seq"'::regclass) NOT NULL,
+    layer_name character varying(255),
+    layer_tablename character varying(255),
+    layer_description character varying,
+    status smallint,
+    min_scale bigint,
+    max_scale bigint,
+    pdf_link character varying(255),
+    url character varying(255),
+    aggregation character varying(255),
+    attribution character varying(1024),
+    lineage character varying(50),
+    tags character varying(255),
+    license character varying(512),
+    comments character varying(255),
+    summary_columns character varying(2048),
+    layer_type character varying(25),
+    access smallint DEFAULT 0,
+    is_filterable smallint DEFAULT 0,
+    author character varying(100),
+    filter_columns character varying(2048),
+    search_columns character varying(2048),
+    color_by character varying(50),
+    title_column character varying(50),
+    size_by character varying(50),
+    editable_columns character varying(2048),
+    media_columns character varying(2048),
+    nid bigint DEFAULT 0,
+    italics_columns character varying(2048),
+    participation_type smallint DEFAULT 0,
+    p_nid bigint DEFAULT 0,
+    created_by character varying(1024),
+    created_date character varying(25),
+    modified_by character varying(1024),
+    modified_date character varying(25),
+    download_formats character varying(255),
+    colorby_cat_col character varying(50),
+    video_columns character varying,
+    is_timebased integer
+);
+
+
+ALTER TABLE public."Meta_Layer" OWNER TO naksha;
+
+--
+-- TOC entry 4474 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".layer_id; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".layer_id IS 'Layer ID';
+
+
+--
+-- TOC entry 4475 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".layer_name; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".layer_name IS 'Layer Name';
+
+
+--
+-- TOC entry 4476 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".layer_tablename; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".layer_tablename IS 'Layer Tablename';
+
+
+--
+-- TOC entry 4477 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".layer_description; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".layer_description IS 'Layer Description';
+
+
+--
+-- TOC entry 4478 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".status; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".status IS 'Status';
+
+
+--
+-- TOC entry 4479 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".min_scale; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".min_scale IS 'Min Zoom Scale';
+
+
+--
+-- TOC entry 4480 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".max_scale; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".max_scale IS 'Max Zoom Scale';
+
+
+--
+-- TOC entry 4481 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".pdf_link; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".pdf_link IS 'PDF Link';
+
+
+--
+-- TOC entry 4482 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".url; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".url IS 'URL Link';
+
+
+--
+-- TOC entry 4483 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".aggregation; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".aggregation IS 'Aggregation';
+
+
+--
+-- TOC entry 4484 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".attribution; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".attribution IS 'Attribution';
+
+
+--
+-- TOC entry 4485 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".lineage; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".lineage IS 'Lineage';
+
+
+--
+-- TOC entry 4486 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".tags; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".tags IS 'Tags';
+
+
+--
+-- TOC entry 4487 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".license; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".license IS 'License';
+
+
+--
+-- TOC entry 4488 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".comments; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".comments IS 'Comments';
+
+
+--
+-- TOC entry 4489 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".summary_columns; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".summary_columns IS 'Summary Columns';
+
+
+--
+-- TOC entry 4490 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".layer_type; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".layer_type IS 'Layer Type';
+
+
+--
+-- TOC entry 4491 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".access; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".access IS 'Access';
+
+
+--
+-- TOC entry 4492 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".is_filterable; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".is_filterable IS 'Is Filterable';
+
+
+--
+-- TOC entry 4493 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".author; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".author IS 'Author';
+
+
+--
+-- TOC entry 4494 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".filter_columns; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".filter_columns IS 'Filter Columns';
+
+
+--
+-- TOC entry 4495 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".search_columns; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".search_columns IS 'Search Columns';
+
+
+--
+-- TOC entry 4496 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".color_by; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".color_by IS 'Color By Column';
+
+
+--
+-- TOC entry 4497 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".title_column; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".title_column IS 'Title Column';
+
+
+--
+-- TOC entry 4498 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".size_by; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".size_by IS 'Size By Column';
+
+
+--
+-- TOC entry 4499 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".editable_columns; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".editable_columns IS 'Editable Columns';
+
+
+--
+-- TOC entry 4500 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".media_columns; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".media_columns IS 'Media Columns';
+
+
+--
+-- TOC entry 4501 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".nid; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".nid IS 'Drupal Node';
+
+
+--
+-- TOC entry 4502 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".italics_columns; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".italics_columns IS 'Italics Columns';
+
+
+--
+-- TOC entry 4503 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".participation_type; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".participation_type IS 'Participation Type: whether the layer is restricted participation,  x participation or sandbox';
+
+
+--
+-- TOC entry 4504 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".p_nid; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".p_nid IS 'Node ID of participation info.';
+
+
+--
+-- TOC entry 4505 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".created_by; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".created_by IS 'Created By';
+
+
+--
+-- TOC entry 4506 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".created_date; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".created_date IS 'Created Date';
+
+
+--
+-- TOC entry 4507 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".modified_by; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".modified_by IS 'Modified By';
+
+
+--
+-- TOC entry 4508 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: COLUMN "Meta_Layer".modified_date; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public."Meta_Layer".modified_date IS 'Modified Date';
+
+
+--
+-- TOC entry 199 (class 1259 OID 16389)
+-- Name: Meta_LinkTable_id_seq; Type: SEQUENCE; Schema: public; Owner: naksha
+--
+
+CREATE SEQUENCE public."Meta_LinkTable_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Meta_LinkTable_id_seq" OWNER TO naksha;
+
+--
+-- TOC entry 202 (class 1259 OID 16395)
+-- Name: layer_access_id_seq; Type: SEQUENCE; Schema: public; Owner: naksha
+--
+
+CREATE SEQUENCE public.layer_access_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.layer_access_id_seq OWNER TO naksha;
+
+--
+-- TOC entry 207 (class 1259 OID 16438)
+-- Name: layer_access; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.layer_access (
+    id bigint DEFAULT nextval('public.layer_access_id_seq'::regclass) NOT NULL,
+    description character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.layer_access OWNER TO naksha;
+
+--
+-- TOC entry 201 (class 1259 OID 16393)
+-- Name: layer_status_id_seq; Type: SEQUENCE; Schema: public; Owner: naksha
+--
+
+CREATE SEQUENCE public.layer_status_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.layer_status_id_seq OWNER TO naksha;
+
+--
+-- TOC entry 208 (class 1259 OID 16442)
+-- Name: layer_status; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.layer_status (
+    id bigint DEFAULT nextval('public.layer_status_id_seq'::regclass) NOT NULL,
+    description character varying(255)
+);
+
+
+ALTER TABLE public.layer_status OWNER TO naksha;
+
+--
+-- TOC entry 203 (class 1259 OID 16397)
+-- Name: permission_pid_seq; Type: SEQUENCE; Schema: public; Owner: naksha
+--
+
+CREATE SEQUENCE public.permission_pid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.permission_pid_seq OWNER TO naksha;
+
+--
+-- TOC entry 205 (class 1259 OID 16424)
+-- Name: permission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.permission (
+    pid integer DEFAULT nextval('public.permission_pid_seq'::regclass) NOT NULL,
+    rid integer DEFAULT 0 NOT NULL,
+    perm text,
+    tid integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.permission OWNER TO naksha;
+
+--
+-- TOC entry 4464 (class 0 OID 16433)
+-- Dependencies: 206
+-- Data for Name: Layer_template; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Layer_template" (__mlocate__id, __mlocate__layer_id, __mlocate__status, __mlocate__nid, __mlocate__created_by, __mlocate__created_date, __mlocate__modified_by, __mlocate__modified_date, __mlocate__validated_by, __mlocate__validated_date) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4462 (class 0 OID 16399)
+-- Dependencies: 204
+-- Data for Name: Meta_Layer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Meta_Layer" (layer_id, layer_name, layer_tablename, layer_description, status, min_scale, max_scale, pdf_link, url, aggregation, attribution, lineage, tags, license, comments, summary_columns, layer_type, access, is_filterable, author, filter_columns, search_columns, color_by, title_column, size_by, editable_columns, media_columns, nid, italics_columns, participation_type, p_nid, created_by, created_date, modified_by, modified_date, download_formats, colorby_cat_col, video_columns, is_timebased) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4465 (class 0 OID 16438)
+-- Dependencies: 207
+-- Data for Name: layer_access; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.layer_access (id, description) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4466 (class 0 OID 16442)
+-- Dependencies: 208
+-- Data for Name: layer_status; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.layer_status (id, description) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4463 (class 0 OID 16424)
+-- Dependencies: 205
+-- Data for Name: permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.permission (pid, rid, perm, tid) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4307 (class 0 OID 19455)
+-- Dependencies: 210
+-- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: naksha
+--
+
+COPY public.spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4509 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: Meta_Layer_layer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: naksha
+--
+
+SELECT pg_catalog.setval('public."Meta_Layer_layer_id_seq"', 34, true);
+
+
+--
+-- TOC entry 4510 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: Meta_LinkTable_id_seq; Type: SEQUENCE SET; Schema: public; Owner: naksha
+--
+
+SELECT pg_catalog.setval('public."Meta_LinkTable_id_seq"', 1, false);
+
+
+--
+-- TOC entry 4511 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: layer_access_id_seq; Type: SEQUENCE SET; Schema: public; Owner: naksha
+--
+
+SELECT pg_catalog.setval('public.layer_access_id_seq', 1, false);
+
+
+--
+-- TOC entry 4512 (class 0 OID 0)
+-- Dependencies: 201
+-- Name: layer_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: naksha
+--
+
+SELECT pg_catalog.setval('public.layer_status_id_seq', 1, false);
+
+
+--
+-- TOC entry 4513 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: layer_template_id_seq; Type: SEQUENCE SET; Schema: public; Owner: naksha
+--
+
+SELECT pg_catalog.setval('public.layer_template_id_seq', 174752, true);
+
+
+--
+-- TOC entry 4514 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: permission_pid_seq; Type: SEQUENCE SET; Schema: public; Owner: naksha
+--
+
+SELECT pg_catalog.setval('public.permission_pid_seq', 1, false);
+
+
+--
+-- TOC entry 4323 (class 2606 OID 16412)
+-- Name: Meta_Layer Meta_Layer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Meta_Layer"
+    ADD CONSTRAINT "Meta_Layer_pkey" PRIMARY KEY (layer_id);
+
+
+--
+-- TOC entry 4325 (class 2606 OID 16414)
+-- Name: Meta_Layer UNK_layer_tablename; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Meta_Layer"
+    ADD CONSTRAINT "UNK_layer_tablename" UNIQUE (layer_tablename);
+
+
+-- Completed on 2019-07-17 07:54:20 EDT
+
+--
+-- PostgreSQL database dump complete
+--
